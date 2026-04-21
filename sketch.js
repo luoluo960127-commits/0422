@@ -27,8 +27,8 @@ function setup() {
 }
 
 function draw() {
-  // 3. 背景顏色改為純白色，移除所有彩色調
-  background(255);
+  // 3. 恢復原本的粉紫色背景
+  background('#f8efff');
 
   // 4. 計算影像寬高為畫布的 60%
   let vW = width * 0.6;
@@ -61,18 +61,17 @@ function draw() {
         let b = capture.pixels[i + 2];
         let avg = floor((r + g + b) / 3); // 計算平均值 (該單位的顏色值)
 
-        // 將攝影機座標映射到畫布顯示區域
+        // 將攝影機座標映射到畫布顯示區域的座標
         let dx = map(x, 0, capture.width, -vW / 2, vW / 2);
         let dy = map(y, 0, capture.height, -vH / 2, vH / 2);
+        
+        // 計算每個馬賽克方塊在畫布上應有的寬高
+        let drawW = vW / (capture.width / unitSize);
+        let drawH = vH / (capture.height / unitSize);
 
-        push();
-        translate(dx, dy);
-        scale(-1, 1); // 再次翻轉回來，確保數字是正的，不會左右顛倒
-        textAlign(CENTER, CENTER);
-        textSize(9);
-        fill(avg);    // 使用計算出的數字作為字體顏色值
-        text(avg, 0, 0); // 顯示該單位的數值
-        pop();
+        fill(avg); // 使用灰階數值填充
+        noStroke();
+        rect(dx, dy, drawW, drawH); // 繪製馬賽克單位
       }
     }
   }
@@ -95,8 +94,8 @@ function draw() {
   for (let i = bubbles.length - 1; i >= 0; i--) {
     let b = bubbles[i];
     b.y -= b.speed; // 向上移動
-    pg.stroke(0, b.opacity); // 改為黑色外框，在白色背景下才看得見
-    pg.fill(0, b.opacity * 0.2); // 改為黑色半透明填充，增加墨水感
+    pg.stroke(255, b.opacity); // 恢復白色外框
+    pg.fill(255, 255, 255, b.opacity * 0.5); // 恢復白色半透明填充
     pg.circle(b.x, b.y, b.size);
 
     // 3. 移除超出畫面的泡泡
