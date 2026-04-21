@@ -1,5 +1,6 @@
 let capture;
 let pg; // 宣告一個 Graphics 物件作為上方圖層
+let bubbles = []; // 儲存泡泡的陣列
 
 function setup() {
   // 1. 產生一個全螢幕的畫布
@@ -34,11 +35,33 @@ function draw() {
   // 繪製底層視訊
   image(capture, 0, 0, vW, vH);
 
-  // --- 在 pg 圖層上繪圖 ---
+  // --- 在 pg 圖層上製作冒泡泡效果 ---
   pg.clear(); // 清除背景，保持透明
-  pg.fill(255, 0, 0);
+
+  // 1. 產生新泡泡
+  if (capture.width > 0 && bubbles.length < 30) {
+    bubbles.push({
+      x: random(pg.width),
+      y: pg.height + 20,
+      size: random(10, 40),
+      speed: random(1, 3),
+      opacity: random(100, 200)
+    });
+  }
+
+  // 2. 更新並繪製泡泡
   pg.noStroke();
-  pg.ellipse(pg.width / 2, pg.height / 2, 50, 50); // 在視訊中央畫一個紅點作為測試
+  for (let i = bubbles.length - 1; i >= 0; i--) {
+    let b = bubbles[i];
+    b.y -= b.speed; // 向上移動
+    pg.fill(255, 255, 255, b.opacity); // 白色半透明泡泡
+    pg.circle(b.x, b.y, b.size);
+
+    // 3. 移除超出畫面的泡泡
+    if (b.y < -50) {
+      bubbles.splice(i, 1);
+    }
+  }
 
   // 繪製頂層 Graphics 物件
   image(pg, 0, 0, vW, vH);
