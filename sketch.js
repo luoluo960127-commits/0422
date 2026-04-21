@@ -19,8 +19,12 @@ function draw() {
   let x = (width - vW) / 2;
   let y = (height - vH) / 2;
 
-  // 5. 將影像繪製在畫布中間
+  // 5. 將影像進行水平翻轉（鏡像）並繪製在畫布中間
+  push(); 
+  translate(width, 0); // 將座標原點移至畫布右側
+  scale(-1, 1);        // 水平翻轉
   image(capture, x, y, vW, vH);
+  pop();
 }
 
 function windowResized() {
