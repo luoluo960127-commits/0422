@@ -27,8 +27,8 @@ function setup() {
 }
 
 function draw() {
-  // 3. 恢復原本的粉紫色背景
-  background('#f8efff');
+  // 3. 將背景更改為更粉嫩的粉紅色
+  background('#ffc1d1');
 
   // 4. 計算影像寬高為畫布的 60%
   let vW = width * 0.6;
