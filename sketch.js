@@ -45,13 +45,11 @@ function draw() {
   scale(-1, 1);                    // 執行水平鏡像翻轉
   imageMode(CENTER);               // 設定影像從中心點繪製
 
-  // 繪製底層視訊
-  // image(capture, 0, 0, vW, vH); // 如果只想看數字，可以把這行註解掉
-
-  // --- 處理 20x20 單位的像素數值化 ---
+  // --- 處理 20x20 單位的黑白馬賽克視訊 ---
   capture.loadPixels();
   let unitSize = 20; // 每個單位的大小
   if (capture.pixels.length > 0) {
+    noStroke(); // 移除方塊邊框，讓畫面更像視訊
     for (let y = 0; y < capture.height; y += unitSize) {
       for (let x = 0; x < capture.width; x += unitSize) {
         // 取得該單位左上角像素的顏色值
@@ -59,19 +57,20 @@ function draw() {
         let r = capture.pixels[i];
         let g = capture.pixels[i + 1];
         let b = capture.pixels[i + 2];
-        let avg = floor((r + g + b) / 3); // 計算平均值 (該單位的顏色值)
+        
+        // 利用 (R+G+B)/3 取得灰階數值
+        let avg = (r + g + b) / 3; 
 
-        // 將攝影機座標映射到畫布顯示區域的座標
+        // 將座標映射到畫布中央 60% 的區域
         let dx = map(x, 0, capture.width, -vW / 2, vW / 2);
         let dy = map(y, 0, capture.height, -vH / 2, vH / 2);
         
-        // 計算每個馬賽克方塊在畫布上應有的寬高
+        // 計算每個單位在畫面上實際的寬高
         let drawW = vW / (capture.width / unitSize);
         let drawH = vH / (capture.height / unitSize);
 
-        fill(avg); // 使用灰階數值填充
-        noStroke();
-        rect(dx, dy, drawW, drawH); // 繪製馬賽克單位
+        fill(avg); // 使用計算出來的黑白顏色填滿
+        rect(dx, dy, drawW, drawH); // 繪製黑白方塊，不再是亂碼數字了！
       }
     }
   }
