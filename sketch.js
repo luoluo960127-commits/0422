@@ -14,8 +14,8 @@ function setup() {
 }
 
 function draw() {
-  // 3. 背景顏色設定為 e7c6ff
-  background('#e7c6ff');
+  // 3. 背景顏色調整為更淺的粉紫色
+  background('#f8efff');
 
   // 4. 計算影像寬高為畫布的 60%
   let vW = width * 0.6;
@@ -39,7 +39,7 @@ function draw() {
   pg.clear(); // 清除背景，保持透明
 
   // 1. 產生新泡泡
-  if (capture.width > 0 && bubbles.length < 50) {
+  if (bubbles.length < 50) {
     bubbles.push({
       x: random(pg.width),
       y: pg.height + 20,
