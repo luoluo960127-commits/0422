@@ -27,8 +27,8 @@ function setup() {
 }
 
 function draw() {
-  // 3. 背景顏色調整為更淺的粉紫色
-  background('#f8efff');
+  // 3. 背景顏色改為純白色，移除所有彩色調
+  background(255);
 
   // 4. 計算影像寬高為畫布的 60%
   let vW = width * 0.6;
@@ -46,7 +46,36 @@ function draw() {
   imageMode(CENTER);               // 設定影像從中心點繪製
 
   // 繪製底層視訊
-  image(capture, 0, 0, vW, vH);
+  // image(capture, 0, 0, vW, vH); // 如果只想看數字，可以把這行註解掉
+
+  // --- 處理 20x20 單位的像素數值化 ---
+  capture.loadPixels();
+  let unitSize = 20; // 每個單位的大小
+  if (capture.pixels.length > 0) {
+    for (let y = 0; y < capture.height; y += unitSize) {
+      for (let x = 0; x < capture.width; x += unitSize) {
+        // 取得該單位左上角像素的顏色值
+        let i = (x + y * capture.width) * 4;
+        let r = capture.pixels[i];
+        let g = capture.pixels[i + 1];
+        let b = capture.pixels[i + 2];
+        let avg = floor((r + g + b) / 3); // 計算平均值 (該單位的顏色值)
+
+        // 將攝影機座標映射到畫布顯示區域
+        let dx = map(x, 0, capture.width, -vW / 2, vW / 2);
+        let dy = map(y, 0, capture.height, -vH / 2, vH / 2);
+
+        push();
+        translate(dx, dy);
+        scale(-1, 1); // 再次翻轉回來，確保數字是正的，不會左右顛倒
+        textAlign(CENTER, CENTER);
+        textSize(9);
+        fill(avg);    // 使用計算出的數字作為字體顏色值
+        text(avg, 0, 0); // 顯示該單位的數值
+        pop();
+      }
+    }
+  }
 
   // --- 在 pg 圖層上製作冒泡泡效果 (疊加在視訊上方) ---
   pg.clear(); // 清除背景，保持透明
@@ -66,8 +95,8 @@ function draw() {
   for (let i = bubbles.length - 1; i >= 0; i--) {
     let b = bubbles[i];
     b.y -= b.speed; // 向上移動
-    pg.stroke(255, b.opacity); // 白色外框
-    pg.fill(255, 255, 255, b.opacity * 0.5); // 半透明填充
+    pg.stroke(0, b.opacity); // 改為黑色外框，在白色背景下才看得見
+    pg.fill(0, b.opacity * 0.2); // 改為黑色半透明填充，增加墨水感
     pg.circle(b.x, b.y, b.size);
 
     // 3. 移除超出畫面的泡泡
