@@ -13,10 +13,16 @@ function setup() {
   // 初始化一個暫時的 Graphics 物件
   pg = createGraphics(100, 100);
 
-  // 產生一個按鈕，放在畫面左上角
-  saveBtn = createButton('儲存截圖 (JPG)');
-  saveBtn.position(20, 20);
-  saveBtn.style('padding', '10px 20px');
+  // 產生一個圓形的快門拍照鈕
+  saveBtn = createButton('');
+  saveBtn.style('width', '70px');
+  saveBtn.style('height', '70px');
+  saveBtn.style('background-color', 'white');
+  saveBtn.style('border', '5px solid #ccc');
+  saveBtn.style('border-radius', '50%');
+  saveBtn.style('box-shadow', '0 4px 8px rgba(0,0,0,0.2)');
+  saveBtn.style('cursor', 'pointer');
+  updateButtonPosition();
   saveBtn.mousePressed(takeSnapshot);
 }
 
@@ -87,6 +93,12 @@ function takeSnapshot() {
   save(img, 'my_capture.jpg'); // 儲存為 jpg
 }
 
+function updateButtonPosition() {
+  // 將按鈕放在畫布底部中央
+  saveBtn.position(windowWidth / 2 - 35, windowHeight - 100);
+}
+
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
+  updateButtonPosition();
 }
