@@ -35,26 +35,26 @@ function draw() {
   // 繪製底層視訊
   image(capture, 0, 0, vW, vH);
 
-  // --- 在 pg 圖層上製作冒泡泡效果 ---
+  // --- 在 pg 圖層上製作冒泡泡效果 (疊加在視訊上方) ---
   pg.clear(); // 清除背景，保持透明
 
   // 1. 產生新泡泡
-  if (capture.width > 0 && bubbles.length < 30) {
+  if (capture.width > 0 && bubbles.length < 50) {
     bubbles.push({
       x: random(pg.width),
       y: pg.height + 20,
-      size: random(10, 40),
-      speed: random(1, 3),
-      opacity: random(100, 200)
+      size: random(15, 45),
+      speed: random(2, 5),
+      opacity: random(150, 255)
     });
   }
 
   // 2. 更新並繪製泡泡
-  pg.noStroke();
   for (let i = bubbles.length - 1; i >= 0; i--) {
     let b = bubbles[i];
     b.y -= b.speed; // 向上移動
-    pg.fill(255, 255, 255, b.opacity); // 白色半透明泡泡
+    pg.stroke(255, b.opacity); // 白色外框
+    pg.fill(255, 255, 255, b.opacity * 0.5); // 半透明填充
     pg.circle(b.x, b.y, b.size);
 
     // 3. 移除超出畫面的泡泡
