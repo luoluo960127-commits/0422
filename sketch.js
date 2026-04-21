@@ -34,8 +34,11 @@ function draw() {
   // 繪製底層視訊
   image(capture, 0, 0, vW, vH);
 
-  // --- 在 pg 圖層上繪圖的範例 (例如畫一個標誌或文字) ---
+  // --- 在 pg 圖層上繪圖 ---
   pg.clear(); // 清除背景，保持透明
+  pg.fill(255, 0, 0);
+  pg.noStroke();
+  pg.ellipse(pg.width / 2, pg.height / 2, 50, 50); // 在視訊中央畫一個紅點作為測試
 
   // 繪製頂層 Graphics 物件
   image(pg, 0, 0, vW, vH);
