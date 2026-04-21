@@ -1,6 +1,7 @@
 let capture;
 let pg; // 宣告一個 Graphics 物件作為上方圖層
 let bubbles = []; // 儲存泡泡的陣列
+let saveBtn; // 儲存按鈕物件
 
 function setup() {
   // 1. 產生一個全螢幕的畫布
@@ -11,6 +12,12 @@ function setup() {
   capture.hide();
   // 初始化一個暫時的 Graphics 物件
   pg = createGraphics(100, 100);
+
+  // 產生一個按鈕，放在畫面左上角
+  saveBtn = createButton('儲存截圖 (JPG)');
+  saveBtn.position(20, 20);
+  saveBtn.style('padding', '10px 20px');
+  saveBtn.mousePressed(takeSnapshot);
 }
 
 function draw() {
@@ -66,6 +73,18 @@ function draw() {
   // 繪製頂層 Graphics 物件
   image(pg, 0, 0, vW, vH);
   pop();
+}
+
+function takeSnapshot() {
+  // 計算視訊在畫布上的區域 (與 draw 函式中的計算邏輯一致)
+  let vW = width * 0.6;
+  let vH = height * 0.6;
+  let x = (width - vW) / 2;
+  let y = (height - vH) / 2;
+
+  // 從畫布中擷取該區域的影像
+  let img = get(x, y, vW, vH);
+  save(img, 'my_capture.jpg'); // 儲存為 jpg
 }
 
 function windowResized() {
