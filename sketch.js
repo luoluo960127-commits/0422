@@ -16,14 +16,13 @@ function draw() {
   // 4. 計算影像寬高為畫布的 60%
   let vW = width * 0.6;
   let vH = height * 0.6;
-  let x = (width - vW) / 2;
-  let y = (height - vH) / 2;
 
   // 5. 將影像進行水平翻轉（鏡像）並繪製在畫布中間
-  push(); 
-  translate(width, 0); // 將座標原點移至畫布右側
-  scale(-1, 1);        // 水平翻轉
-  image(capture, x, y, vW, vH);
+  push();
+  translate(width / 2, height / 2); // 移至畫布中心
+  scale(-1, 1);                    // 執行水平鏡像翻轉
+  imageMode(CENTER);               // 設定影像從中心點繪製
+  image(capture, 0, 0, vW, vH);    // 在目前的中心原點繪製影像
   pop();
 }
 
